@@ -34,6 +34,7 @@ def message():
 def get_movies():
     return movies
 
+# id es un parameter path
 @app.get('/movies/{id}',tags=['movies'])
 def get_movie(id:int):
     for item in movies:
@@ -42,6 +43,7 @@ def get_movie(id:int):
     
     return []
 
+# category es un parameter query
 @app.get('/movies/',tags=['movies'])
 def get_movies_by_category(category:str):
    return [item for item in movies if item["category"] == category]
