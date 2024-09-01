@@ -24,5 +24,9 @@ uvicorn main:app --reload --port 5000
 uvicorn main:app --reload --port 5000 --host 0.0.0.0
 
 
+# algunos articulos de interes 
+https://www.linkedin.com/pulse/fastapi-vs-django-flask-germ%C3%A1n-salina-ccmgf/?trackingId=xFO%20D1im3HDFakdN1WHong
+
+
 
 
