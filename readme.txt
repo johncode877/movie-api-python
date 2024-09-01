@@ -7,6 +7,9 @@ source env/bin/activate
 # en caso se necesite actualizar pip3
 python3 -m pip3 install --upgrade pip3
 
+# instalar todas las dependencias 
+pip3 install -r requirements.txt
+
 # instalar fastapi 
 pip3 install fastapi 
 
