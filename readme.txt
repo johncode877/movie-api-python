@@ -31,9 +31,14 @@ uvicorn main:app --reload --port 5000 --host 0.0.0.0
 https://www.linkedin.com/pulse/fastapi-vs-django-flask-germ%C3%A1n-salina-ccmgf/?trackingId=xFO%20D1im3HDFakdN1WHong
 
 
+# Instalar del plugin SQLite viewer en Visual Studio Code 
+
 # instalar modulo para manejar el token
 pip3 install pyjwt 
 
-
+# instalar modulo sqlalchemy para manejar base de datos 
 pip3 install sqlalchemy 
+
+
+
 
