@@ -35,4 +35,5 @@ https://www.linkedin.com/pulse/fastapi-vs-django-flask-germ%C3%A1n-salina-ccmgf/
 pip3 install pyjwt 
 
 
+pip3 install sqlalchemy 
 
