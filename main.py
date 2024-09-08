@@ -7,6 +7,8 @@ from jwt_manager import create_token,validate_token
 from fastapi.security import HTTPBearer
 from config.database import Session,engine,Base
 from models.movie import Movie as MovieModel
+from fastapi.encoders import jsonable_encoder
+
 
 # instancia de fastapi
 app = FastAPI()
@@ -89,27 +91,32 @@ def login(user: User):
 
 @app.get('/movies',tags=['movies'],response_model=List[Movie],status_code=200,dependencies=[Depends(JWTBearer())])
 def get_movies() -> List[Movie]:
-    return JSONResponse(status_code=200,content=movies)
+  db = Session()
+  result = db.query(MovieModel).all() 
+  return JSONResponse(status_code=200,content=jsonable_encoder(result))
 
 # id es un parameter path
 @app.get('/movies/{id}',tags=['movies'],response_model=Movie,status_code=200)
 def get_movie(id:int=Path(ge=1,le=2000)) -> Movie:
-    for item in movies:
-        if item["id"] == id:
-            return JSONResponse(status_code=200,content=item)
+
+   db = Session()
+   result = db.query(MovieModel).filter(MovieModel.id==id).first()
+   if not result:
+     return JSONResponse(status_code=404,content={'message':"No encontrado"}) 
+   return JSONResponse(status_code=200,content=jsonable_encoder(result))
     
-    return JSONResponse(status_code=404,content=[])
 
 # category es un parameter query
 @app.get('/movies/',tags=['movies'],response_model=List[Movie],status_code=200)
 def get_movies_by_category(category:str=Query(min_length=5,max_length=15)) -> List[Movie]:
-   data = [item for item in movies if item["category"] == category]
-   if(data):
-     return JSONResponse(status_code=200,content=data)
-   else:
-     return JSONResponse(status_code=404,content=data)      
    
-   return JSONResponse(content=data)
+   db = Session()
+   result = db.query(MovieModel).filter(MovieModel.category==category).all()
+   if not result:
+      return JSONResponse(status_code=404,content={'message':"No encontrado"})
+   else: 
+      return JSONResponse(status_code=200,content=jsonable_encoder(result)) 
+
 
 # para que los campos se han considerados
 # como parte del request body y no como variable query 
