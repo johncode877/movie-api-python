@@ -112,11 +112,7 @@ def get_movies_by_category(category:str=Query(min_length=5,max_length=15)) -> Li
    
    db = Session()
    result = db.query(MovieModel).filter(MovieModel.category==category).all()
-   if not result:
-      return JSONResponse(status_code=404,content={'message':"No encontrado"})
-   else: 
-      return JSONResponse(status_code=200,content=jsonable_encoder(result)) 
-
+   return JSONResponse(status_code=200,content=jsonable_encoder(result)) 
 
 # para que los campos se han considerados
 # como parte del request body y no como variable query 
@@ -137,23 +133,32 @@ def create_movie(movie:Movie) -> dict:
 
 @app.put('/movies/{id}',tags=['movies'],response_model=dict,status_code=200)
 def update_movie(id: int, movie: Movie) -> dict:
-    for item in movies:
-        if item["id"] == id:
-            item["title"] = movie.title   
-            item["overview"] = movie.overview
-            item["year"] = movie.year   
-            item["rating"] = movie.rating   
-            item["year"] = movie.year   
-            item["category"] = movie.category
 
+    db = Session()
+    result = db.query(MovieModel).filter(MovieModel.id==id).first()
+    if not result:
+     return JSONResponse(status_code=404,content={'message':"No encontrado"}) 
+    
+    result.title = movie.title
+    result.category = movie.category
+    result.rating = movie.rating
+    result.overview = movie.overview
+    result.year = movie.year
+
+    db.commit()
     return JSONResponse(status_code=status.HTTP_200_OK,content={"message":"Se ha modificado la pelicula"})
 
 # response_model indica el modelo de respuesta
 @app.delete('/movies/{id}',tags=['movies'],response_model=dict,status_code=200)
 def delete_movie(id: int) -> dict: 
-    for item in movies:
-    	if item["id"] == id:
-            movies.remove(item)
+
+    db = Session()
+    result = db.query(MovieModel).filter(MovieModel.id==id).first()
+    if not result:
+     return JSONResponse(status_code=404,content={'message':"No encontrado"}) 
+
+    db.delete(result)
+    db.commit()    
     return JSONResponse(status_code=200,content={"message":"Se ha eliminado la pelicula"})
 
 
