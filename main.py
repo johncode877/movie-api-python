@@ -6,15 +6,13 @@ from typing import List, Optional
 from jwt_manager import create_token,validate_token
 from fastapi.security import HTTPBearer
 from config.database import Session,engine,Base
-from models.movie import Movie
-
+from models.movie import Movie as MovieModel
 
 # instancia de fastapi
 app = FastAPI()
 
 app.title = "Mi aplicacion con FastAPI"
 app.version = "0.0.1"
-
 
 Base.metadata.create_all(bind=engine)
 
@@ -118,6 +116,11 @@ def get_movies_by_category(category:str=Query(min_length=5,max_length=15)) -> Li
 # es necesario asignarles que son de tipo Body	       
 @app.post('/movies',tags=['movies'], response_model=dict,status_code=201)
 def create_movie(movie:Movie) -> dict:
+
+    db = Session()
+    new_movie = MovieModel(**movie.model_dump())
+    db.add(new_movie)
+    db.commit()
     # convierte el objeto Movie (pydantic) a un diccionario
     # para que pueda ser añadido a la lista de diccionarios
     # de movies 
