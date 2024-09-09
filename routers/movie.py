@@ -8,6 +8,9 @@ from models.movie import Movie as MovieModel
 from fastapi.encoders import jsonable_encoder
 from middleware.jwt_bearer import JWTBearer
 
+from services.movie import MovieService
+
+
 movie_router = APIRouter()
 
 # clase que hereda de BaseModel 
@@ -40,7 +43,8 @@ class Movie(BaseModel):
 @movie_router.get('/movies',tags=['movies'],response_model=List[Movie],status_code=200,dependencies=[Depends(JWTBearer())])
 def get_movies() -> List[Movie]:
   db = Session()
-  result = db.query(MovieModel).all() 
+  result = MovieService(db).get_movies()
+  
   return JSONResponse(status_code=200,content=jsonable_encoder(result))
 
 # id es un parameter path
@@ -48,7 +52,8 @@ def get_movies() -> List[Movie]:
 def get_movie(id:int=Path(ge=1,le=2000)) -> Movie:
 
    db = Session()
-   result = db.query(MovieModel).filter(MovieModel.id==id).first()
+   result = MovieService(db).get_movie(id)
+   
    if not result:
      return JSONResponse(status_code=404,content={'message':"No encontrado"}) 
    
@@ -59,8 +64,8 @@ def get_movie(id:int=Path(ge=1,le=2000)) -> Movie:
 @movie_router.get('/movies/',tags=['movies'],response_model=List[Movie],status_code=200)
 def get_movies_by_category(category:str=Query(min_length=5,max_length=15)) -> List[Movie]:
    
-   db = Session()
-   result = db.query(MovieModel).filter(MovieModel.category==category).all()
+   db = Session()   
+   result = MovieService(db).get_movies_by_category(category)
    return JSONResponse(status_code=200,content=jsonable_encoder(result)) 
 
 # para que los campos se han considerados
