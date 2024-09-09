@@ -41,5 +41,7 @@ https://www.linkedin.com/pulse/fastapi-vs-django-flask-germ%C3%A1n-salina-ccmgf/
 
 https://bitybyte.github.io/Organzando-codigo-Python/
 
+https://fastapi.tiangolo.com/tutorial/bigger-applications/
+
 
 

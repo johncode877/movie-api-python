@@ -9,35 +9,11 @@ from fastapi.encoders import jsonable_encoder
 from middleware.jwt_bearer import JWTBearer
 
 from services.movie import MovieService
+from schemas.movie import Movie
 
 
 movie_router = APIRouter()
 
-# clase que hereda de BaseModel 
-# pydantic es un modulo
-# que permite trabajar con esquemas
-class Movie(BaseModel):
-    id: Optional[int]=None
-    title: str = Field(min_length=5,max_length=15)
-    overview: str = Field(min_length=15,max_length=50)
-    year: int = Field(le=2022)
-    rating: float = Field(ge=1,le=10)
-    category: str = Field(min_length=5,max_length=15)
-     
-    class Config:
-        json_schema_extra = {
-           "examples" : [
-               {
-                "id": 1,
-                "title": "Mi pelicula",
-                "overview": "Descripcion de la pelicula",
-                "year": 2022,
-                "rating": 9.8,
-                "category": "Accion"
-               }
-            ]
-        }
-    
 
 
 @movie_router.get('/movies',tags=['movies'],response_model=List[Movie],status_code=200,dependencies=[Depends(JWTBearer())])
@@ -75,12 +51,7 @@ def get_movies_by_category(category:str=Query(min_length=5,max_length=15)) -> Li
 def create_movie(movie:Movie) -> dict:
 
     db = Session()
-    new_movie = MovieModel(**movie.model_dump())
-    db.add(new_movie)
-    db.commit()
-    # convierte el objeto Movie (pydantic) a un diccionario
-    # para que pueda ser añadido a la lista de diccionarios
-    # de movies 
+    MovieService(db).create_movie(movie)
     
     return JSONResponse(status_code=201,content={"message":"Se ha registrado la pelicula"})
 
@@ -89,17 +60,14 @@ def create_movie(movie:Movie) -> dict:
 def update_movie(id: int, movie: Movie) -> dict:
 
     db = Session()
-    result = db.query(MovieModel).filter(MovieModel.id==id).first()
+
+    result = MovieService(db).get_movie(id)
+
     if not result:
      return JSONResponse(status_code=404,content={'message':"No encontrado"}) 
     
-    result.title = movie.title
-    result.category = movie.category
-    result.rating = movie.rating
-    result.overview = movie.overview
-    result.year = movie.year
+    MovieService(db).update_movie(id,movie)
 
-    db.commit()
     return JSONResponse(status_code=status.HTTP_200_OK,content={"message":"Se ha modificado la pelicula"})
 
 # response_model indica el modelo de respuesta
@@ -107,10 +75,11 @@ def update_movie(id: int, movie: Movie) -> dict:
 def delete_movie(id: int) -> dict: 
 
     db = Session()
-    result = db.query(MovieModel).filter(MovieModel.id==id).first()
+    result = MovieService(db).get_movie(id)
+
     if not result:
      return JSONResponse(status_code=404,content={'message':"No encontrado"}) 
 
-    db.delete(result)
-    db.commit()    
+    MovieService(db).delete_movie(result)  
+    
     return JSONResponse(status_code=200,content={"message":"Se ha eliminado la pelicula"})
