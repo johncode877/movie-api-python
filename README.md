@@ -76,6 +76,40 @@ docker compose down
 
 
 
+# Trabajando con postgresql
+
+Debemos crear una base de datos postgresql (movie)
+luego ejecutar los scripts de la carpeta
+
+db/1_create.sql 
+db/2_grants.sql 
+
+Instalar el paquete python-dotenv
+
+pip3 install python-dotenv
+
+Crear las siguientes variable de entorno 
+en tu host 
+
+Estas variables serviran para conectar
+a tu base de datos postgresql desde 
+el contenedor de tu aplicacion 
+
+export DB_USER     = xxxxxx
+export DB_PASSWORD = yyyyyy
+export DB_NAME     = zzzzzz
+
+puedes registrarlas en el archivo
+/etc/profile y luego las recargas con el siguiente 
+comando 
+source /etc/profile
+
+# Instalar el paquete de dependencia 
+# para postgresql
+
+pip3 install psycopg2-binary
+
+
 # Algunos articulos de interes 
 
 https://www.linkedin.com/pulse/fastapi-vs-django-flask-germ%C3%A1n-salina-ccmgf/?trackingId=xFO%20D1im3HDFakdN1WHong
