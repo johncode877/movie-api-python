@@ -18,3 +18,11 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME} 
     network_mode: "host"
+    ## para usar con compose watch
+
+    #develop:
+    #  watch:
+    #    - action: rebuild
+    #      path: .
+
+    

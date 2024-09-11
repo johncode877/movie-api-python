@@ -110,6 +110,20 @@ source /etc/profile
 pip3 install psycopg2-binary
 
 
+# Usando compose watch
+
+Despues de añadir la configuracion 
+compose watch en el archvio compose.yaml 
+
+ejecutamos a la aplicacion usando 
+
+docker compose watch
+
+luego cualquier cambio en la aplicacion 
+se vera inmediatamente reflejado en el 
+contenedor en ejecucion 
+
+
 # Algunos articulos de interes 
 
 https://www.linkedin.com/pulse/fastapi-vs-django-flask-germ%C3%A1n-salina-ccmgf/?trackingId=xFO%20D1im3HDFakdN1WHong
@@ -122,5 +136,5 @@ https://devtodevops.com/keep-docker-container-running/
 
 https://www.baeldung.com/ops/running-docker-containers-indefinitely
 
-
+https://docs.docker.com/guides/language/python/develop/
 
