@@ -1,0 +1,21 @@
+name: GitHub Actions Init
+run-name: "!Start with GitHub Actions!"
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+jobs:
+  hola-mundo:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Define variable 
+      run: echo "USERNAME=${{ github.actor}} " >> $GITHUB_ENV
+    # optional config  
+    #- name: Set up Python 3.10
+    #  uses: actions/setup-python@v3
+    #  with:
+    #    python-version: "3.10"
+    - name: Correr script python
+      run: python hola_mundo.py
