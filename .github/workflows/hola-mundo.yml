@@ -1,11 +1,18 @@
-# On /.github/workflows hola-mundo.yml
-name: hola-mundo
-on: 
+name: Hola Mundo
+
+on:
   push:
-    branches: ["develop"]
-jobs: 
-  hola-mundo:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+jobs:
+  build:
     runs-on: ubuntu-latest
-    steps: 
-      -name: Hola Mundo
-       run: python hola_mundo.py
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: hola-mundo-running
+      run: python hola_mundo.py
