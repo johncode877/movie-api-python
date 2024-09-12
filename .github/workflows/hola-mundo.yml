@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       -name: Public IP
-        id: ip
-        uses: haythem/public-ip@v1.3
+       uses: haythem/public-ip@v1.3
+       id: ip       
       -name: Hola Mundo 
-        run: echo !Hola Mundo desde ${{steps.ip.outputs.ipv4 }}! 
+       run: echo !Hola Mundo desde ${{steps.ip.outputs.ipv4 }}! 
